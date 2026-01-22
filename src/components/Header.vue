@@ -2,7 +2,7 @@
   <el-header class="header-wrapper">
     <div class="header-container">
       <div class="header-title">添加新参数</div>
-      <el-form :model="param" :inline="true" :rules="rules" class="header-form">
+      <el-form ref="formRef" :model="param" :inline="true" :rules="rules" class="header-form">
         <el-form-item prop="name" class="form-item">
           <el-input v-model="param.name" placeholder="请输入参数名称" clearable class="soft-input"></el-input>
         </el-form-item>
@@ -43,11 +43,13 @@ import {
   ElOption,
   ElRadioGroup,
   ElRadio,
+  type FormInstance,
 } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 import { useFormStore } from '@/stores/form'
 import { genrateId } from '@/util/genrateId'
 import { DataType, NumberType, type IFormData } from '@/types'
+const formRef = ref<FormInstance | null>()
 const formStore = useFormStore()
 
 const rules = {
@@ -80,7 +82,9 @@ const reset = () => {
   param.len = null
 }
 
-const addToForm = () => {
+const addToForm = async () => {
+  const res = await formRef.value?.validate()
+  if (!res) return
   formStore.addForm(param)
   reset()
 }
