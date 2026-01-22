@@ -13,4 +13,19 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  build: {
+    minify: true,
+    rollupOptions: {
+      output: {
+        chunkFileNames: 'assets/JS/[name]-[hash].js',
+        entryFileNames: 'assets/JS/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return id.toString().split('node_modules/')[1].split('/')[0].toString()
+          }
+        },
+      },
+    },
+  },
 })
