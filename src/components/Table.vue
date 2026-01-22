@@ -2,7 +2,37 @@
   <div class="table-container">
     <div class="table-title">属性配置</div>
     <div class="table-wrapper">
-      <el-table :data="data" class="soft-table" stripe>
+
+      <table class="w-full overflow-hidden">
+        <thead>
+          <tr class="bg-gray-100 h-15">
+            <th>属性名</th>
+            <th>数据类型</th>
+            <th>配置（可选）</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <transition-group name="tbody" tag="tbody">
+          <tr v-for="item in data" :key="item.id" class=" odd:bg-amber-50 even:bg-green-50 h-15">
+            <td class=" text-center ">{{ item.name }}</td>
+            <td class="text-center">{{ item.type }}</td>
+            <td class="text-center">
+              <span v-if="item.len">{{ item.len }}</span>
+              <span v-if="item.size">{{ item.size }}</span>
+              <span v-if="item.width && item.height">{{ item.width + 'x' + item.height }}</span>
+            </td>
+            <td>
+              <div class="flex justify-center items-center">
+                <el-button type="primary" link @click="modifyItem(item.id)" class="action-link">修改</el-button>
+                <el-button type="danger" link @click="removeFromItem(item.id)" class="action-link">删除</el-button>
+              </div>
+            </td>
+          </tr>
+        </transition-group>
+      </table>
+
+
+      <!-- <el-table :data="data" class="soft-table" stripe>
         <el-table-column label="属性名" prop="name" min-width="120"></el-table-column>
         <el-table-column label="数据类型" prop="type" min-width="100"></el-table-column>
         <el-table-column label="长度（可选）" min-width="120">
@@ -17,16 +47,16 @@
               {{ scope.row.width + 'x' + scope.row.height }}
             </span>
           </template>
-        </el-table-column>
-        <el-table-column label="操作" min-width="140" fixed="right">
-          <template #default="scope">
+</el-table-column>
+<el-table-column label="操作" min-width="140" fixed="right">
+  <template #default="scope">
             <div class="action-buttons">
               <el-button type="primary" link @click="modifyItem(scope.row.id)" class="action-link">修改</el-button>
               <el-button type="danger" link @click="removeFromItem(scope.row.id)" class="action-link">删除</el-button>
             </div>
           </template>
-        </el-table-column>
-      </el-table>
+</el-table-column>
+</el-table> -->
     </div>
   </div>
 </template>
@@ -36,7 +66,7 @@ import { ElButton, ElTable, ElTableColumn } from 'element-plus'
 import { useFormStore } from '@/stores/form'
 import { genrateId } from '@/util/genrateId'
 import { DataType, type IFormData } from '@/types'
-import { ref } from 'vue'
+import { ref, Transition, TransitionGroup } from 'vue'
 
 const drawer = ref(false)
 const formStore = useFormStore()
@@ -60,6 +90,17 @@ function modifyItem(id: string) {
 </script>
 
 <style scoped>
+.tbody-enter-active,
+.tbody-leave-active {
+  transition: all 0.5s ease;
+}
+
+.tbody-enter-from,
+.tbody-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
 .table-container {
   margin: 20px;
   margin-top: 20px;

@@ -9,7 +9,15 @@ import { generateAvatar, generateImage } from '@/util/genrateImage'
 import { ElMessage } from 'element-plus'
 
 export const useFormStore = defineStore('form', () => {
-  const form = ref<IFormData[]>([])
+  const form = ref<IFormData[]>([
+    {
+      id: genrateId(),
+      name: 'name',
+      type: '中文',
+      value: '',
+      len: 2,
+    },
+  ])
 
   function addForm(data: IFormData) {
     form.value.push({

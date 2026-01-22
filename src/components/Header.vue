@@ -44,8 +44,9 @@ import {
   ElRadioGroup,
   ElRadio,
   type FormInstance,
+  ElMessage,
 } from 'element-plus'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { useFormStore } from '@/stores/form'
 import { genrateId } from '@/util/genrateId'
 import { DataType, NumberType, type IFormData } from '@/types'
@@ -69,23 +70,55 @@ const param = reactive<IFormData>({
   id: genrateId(),
   name: '',
   type: 'string',
-  len: 10,
-  size: 10,
-  width: 10,
-  height: 10,
-  v: 4,
 })
 
-const reset = () => {
-  param.name = ''
-  param.type = 'string'
-  param.len = null
+const typeConfigDefaults = {
+  string: { len: 10 },
+  number: { len: 10 },
+  float: { len: 10 },
+  中文: { len: 10 },
+  Image: { width: 100, height: 100 },
+  Avatar: { size: 100 }
 }
+
+const reset = () => {
+  Object.assign(param, {
+    id: param.id,
+    name: '',
+    type: 'string',
+    len: undefined,
+    width: undefined,
+    height: undefined,
+    size: undefined
+  })
+}
+
+watch(
+  () => param.type,
+  (newType) => {
+    // 检查是否有对应的默认配置
+    const defaultConfig = typeConfigDefaults[newType as keyof typeof typeConfigDefaults]
+
+    if (defaultConfig) {
+      Object.entries(defaultConfig).forEach(([key, value]) => {
+        if (!(key in param) || param[key as keyof IFormData] === undefined) {
+          (param as any)[key] = value
+        }
+      })
+    }
+  },
+  { immediate: true }
+)
 
 const addToForm = async () => {
   const res = await formRef.value?.validate()
   if (!res) return
-  formStore.addForm(param)
+  const index = formStore.form.findIndex(item => item.name === param.name)
+  if (index > 0) {
+    ElMessage.error('属性名称已存在')
+    return
+  }
+  formStore.addForm({ ...param })
   reset()
 }
 </script>
