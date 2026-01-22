@@ -1,16 +1,17 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { genrateId } from '@/util/genrateId'
-import type { FormData } from '@/types/index'
+import type { IFormData, UUID } from '@/types/index'
 import getRandomName from '@/util/genrateName'
 import { genrateDate } from '@/util/genrateDate'
 import { randomString } from '@/util/randomString'
-import { genrateAvatar, genrateImage } from '@/util/genrateImage'
+import { generateAvatar, generateImage } from '@/util/genrateImage'
+import { ElMessage } from 'element-plus'
 
 export const useFormStore = defineStore('form', () => {
-  const form = ref<FormData[]>([])
+  const form = ref<IFormData[]>([])
 
-  function addForm(data: FormData) {
+  function addForm(data: IFormData) {
     form.value.push({
       ...data,
     })
@@ -20,7 +21,7 @@ export const useFormStore = defineStore('form', () => {
     form.value = form.value.filter((item) => item.id !== id)
   }
 
-  function updateForm(id: string, data: Partial<FormData>) {
+  function updateForm(id: string, data: Partial<IFormData>) {
     const index = form.value.findIndex((item) => item.id === id)
     if (index !== -1 && form.value[index]) {
       form.value[index] = {
@@ -30,7 +31,11 @@ export const useFormStore = defineStore('form', () => {
     }
   }
 
-  function genrateJSON(len: number = 10, type: object | string = 'object') {
+  function genrateJSON(len: number = 10) {
+    if (!form.value.length) {
+      ElMessage.error('属性不能为空！')
+      return
+    }
     const json = []
     for (let i = 0; i < len; i++) {
       const obj: Record<string, string | number | boolean | Date> = {}
@@ -43,7 +48,7 @@ export const useFormStore = defineStore('form', () => {
             item.value = genrateDate()
             break
           case 'number':
-            item.value = Math.floor(Math.random() * (item.len || 100))
+            item.value = Math.floor(Math.random() * 10 ** (item.len! || 4))
             break
           case 'float':
             item.value = Math.random() * (item.len || 100)
@@ -56,11 +61,12 @@ export const useFormStore = defineStore('form', () => {
             break
           case 'ID':
             item.value = genrateId()
+            break
           case 'Image':
-            item.value = genrateImage()
+            item.value = generateImage(item.height || 200, item.width || 200)
             break
           case 'Avatar':
-            item.value = genrateAvatar()
+            item.value = generateAvatar(item.size || 20)
             break
         }
         obj[item.name] = item.value!
@@ -68,8 +74,7 @@ export const useFormStore = defineStore('form', () => {
       json.push(obj)
     }
 
-    if (type === 'object') return json
-    if (type === 'string') return JSON.stringify(json, null, 2)
+    return JSON.stringify(json)
   }
 
   return {
