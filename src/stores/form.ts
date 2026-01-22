@@ -77,11 +77,16 @@ export const useFormStore = defineStore('form', () => {
     return JSON.stringify(json)
   }
 
+  function revoke() {
+    form.value = []
+  }
+
   return {
     form,
     addForm,
     removeForm,
     updateForm,
     genrateJSON,
+    revoke,
   }
 })

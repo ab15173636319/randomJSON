@@ -51,7 +51,7 @@ const randomCodeHandler = () => {
       </div>
       <div class="button-group">
         <el-button type="primary" @click="randomCodeHandler" class="action-btn">生成代码</el-button>
-        <el-button type="danger" @click="" class="action-btn" style="margin: 0;">撤销</el-button>
+        <el-button type="danger" @click="formStore.revoke()" class="action-btn" style="margin: 0;">撤销</el-button>
       </div>
     </div>
   </div>

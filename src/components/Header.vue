@@ -67,19 +67,22 @@ const param = reactive<IFormData>({
   id: genrateId(),
   name: '',
   type: 'string',
-  len: null,
+  len: 10,
   size: 10,
   width: 10,
   height: 10,
   v: 4,
 })
 
-const needDisable = computed(() => {
-  return ['Date', 'boolean', 'ID'].includes(param.type)
-})
+const reset = () => {
+  param.name = ''
+  param.type = 'string'
+  param.len = null
+}
 
 const addToForm = () => {
   formStore.addForm(param)
+  reset()
 }
 </script>
 
