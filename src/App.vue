@@ -31,27 +31,27 @@ const randomCodeHandler = () => {
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div class="app-container">
     <Header />
     <Table :data="formStore.form" @update:data="modifyHandler" />
 
-    <div class="m-10 mb-[200px] shadow-2xl" v-if="code">
-      <pre class="bg-gray-900 p-5 rounded-2xl text-green-400">
-          <code class="font-mono text-sm md:text-base break-all whitespace-pre-wrap">{{ code }}</code>
+    <div class="code-display" v-if="code">
+      <pre class="code-wrapper">
+          <code class="code-content">{{ code }}</code>
       </pre>
     </div>
 
-    <div class="flex-col w-full fixed bottom-0 right-0 p-10 bg-gray-700 flex justify-center items-center gap-5">
-      <div class="w-1/3">
-        <el-form :inline="true" class="flex gap-5">
+    <div class="bottom-panel">
+      <div class="form-wrapper">
+        <el-form :inline="true" class="form-inline">
           <el-form-item label="数据长度">
             <el-input type="number" :min="1" v-model="maxLen" />
           </el-form-item>
         </el-form>
       </div>
-      <div class="flex">
-        <el-button type="primary" @click="randomCodeHandler">生成代码</el-button>
-        <el-button type="danger" @click="">撤销</el-button>
+      <div class="button-group">
+        <el-button type="primary" @click="randomCodeHandler" class="action-btn">生成代码</el-button>
+        <el-button type="danger" @click="" class="action-btn" style="margin: 0;">撤销</el-button>
       </div>
     </div>
   </div>
@@ -59,16 +59,135 @@ const randomCodeHandler = () => {
 </template>
 
 <style scoped>
-/* 全局响应式样式 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 180px;
+}
+
+.code-display {
+  margin: 20px;
+  margin-bottom: 200px;
+  box-shadow: var(--shadow-medium);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.code-wrapper {
+  background: linear-gradient(135deg, #2d3e2d 0%, #1a2a1a 100%);
+  padding: 24px;
+  border-radius: 16px;
+  margin: 0;
+  overflow-x: auto;
+}
+
+.code-content {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #a8d5a8;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.bottom-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, rgba(255, 254, 249, 0.98) 0%, rgba(250, 248, 243, 0.98) 100%);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 -4px 20px rgba(74, 74, 58, 0.08);
+  border-top: 1px solid var(--border-color);
+  z-index: 100;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-inline {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.action-btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* 移动端响应式样式 */
 @media (max-width: 768px) {
+  .app-container {
+    padding-bottom: 220px;
+  }
+
+  .code-display {
+    margin: 12px;
+    margin-bottom: 240px;
+  }
+
+  .code-wrapper {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .code-content {
+    font-size: 12px;
+  }
+
+  .bottom-panel {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .form-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .form-inline {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .button-group {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+    padding: 12px 20px;
+  }
 
   .el-input,
   .el-select {
     width: 100% !important;
-  }
-
-  ._table {
-    margin-top: 200px;
   }
 
   .el-table {
@@ -77,7 +196,7 @@ const randomCodeHandler = () => {
 
   .el-table th,
   .el-table td {
-    padding: 4px 0 !important;
+    padding: 8px 4px !important;
   }
 
   .el-drawer {
@@ -90,13 +209,22 @@ const randomCodeHandler = () => {
 }
 
 @media (max-width: 480px) {
+  .code-content {
+    font-size: 11px;
+  }
+
+  .bottom-panel {
+    padding: 12px;
+  }
+
   .el-form--inline .el-form-item {
     margin-right: 0 !important;
+    width: 100%;
   }
 
   .el-button {
     font-size: 0.875rem !important;
-    padding: 8px 12px !important;
+    padding: 10px 16px !important;
   }
 }
 </style>

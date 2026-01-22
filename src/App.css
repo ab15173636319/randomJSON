@@ -1,1 +1,124 @@
 @import 'tailwindcss';
+
+/* 全局护眼柔和配色方案 */
+:root {
+  /* 护眼背景色 - 米色、浅黄、浅绿调 */
+  --primary-bg: #faf8f3;
+  --card-bg: #fffef9;
+  --soft-beige: #f5f1e8;
+  --soft-cream: #faf6ed;
+  --soft-warm-gray: #ede8dd;
+  --soft-yellow: #fef9e7;
+  --soft-green: #f0f7e8;
+  --soft-amber: #fff8e1;
+
+  /* 护眼文字颜色 - 降低对比度 */
+  --text-primary: #4a4a3a;
+  --text-secondary: #6b6b5a;
+  --text-muted: #8a8a7a;
+
+  /* 护眼边框和分割线 */
+  --border-color: #e8e3d6;
+  --border-light: #f0ede5;
+
+  /* 柔和的阴影 */
+  --shadow-soft: 0 2px 12px rgba(74, 74, 58, 0.06);
+  --shadow-medium: 0 4px 20px rgba(74, 74, 58, 0.08);
+
+  /* 护眼强调色 */
+  --accent-warm: #d4a574;
+  --accent-soft: #c9a882;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #faf8f3 0%, #f5f1e8 50%, #f0f7e8 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text-primary);
+}
+
+/* 护眼的滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--soft-warm-gray);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c9a882;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b8966f;
+}
+
+/* Element Plus 组件护眼配色优化 */
+:deep(.el-button--primary) {
+  background-color: var(--accent-warm);
+  border-color: var(--accent-warm);
+  color: #fff;
+}
+
+:deep(.el-button--primary:hover) {
+  background-color: var(--accent-soft);
+  border-color: var(--accent-soft);
+}
+
+:deep(.el-button--warning) {
+  background-color: #e6c89a;
+  border-color: #e6c89a;
+  color: #fff;
+}
+
+:deep(.el-button--warning:hover) {
+  background-color: #d4a574;
+  border-color: #d4a574;
+}
+
+:deep(.el-input__wrapper) {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: 0 0 0 1px var(--border-color) inset;
+}
+
+:deep(.el-input__wrapper:hover) {
+  box-shadow: 0 0 0 1px var(--accent-warm) inset;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px var(--accent-warm) inset;
+}
+
+:deep(.el-select .el-input__wrapper) {
+  background-color: var(--card-bg);
+}
+
+:deep(.el-table) {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+:deep(.el-table th.el-table__cell) {
+  background-color: transparent;
+}
+
+:deep(.el-table td.el-table__cell) {
+  border-bottom-color: var(--border-light);
+}
+
+:deep(.el-drawer) {
+  background-color: transparent;
+}
+
+:deep(.el-drawer__body) {
+  color: var(--text-primary);
+}
