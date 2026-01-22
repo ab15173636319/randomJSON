@@ -1,48 +1,87 @@
-# randomJSON
+# RandomJSON 应用说明
 
-This template should help get you started developing with Vue 3 in Vite.
+## 项目概述
+RandomJSON 是一个基于 Vue 3 和 Vite 构建的**随机虚拟数据生成工具**，能够根据用户定义的字段结构批量生成随机JSON数据，并自动复制到剪贴板。
 
-## Recommended IDE Setup
+## 核心功能
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### 📝 字段配置
+- **多种数据类型**：支持 `string`、`number`、`float`、`boolean`、`Date`、`中文`、`ID`、`Image`、`Avatar`
+- **自定义参数**：可根据不同类型设置长度、尺寸等参数
+- **可视化管理**：通过表格形式查看和编辑字段配置
 
-## Recommended Browser Setup
+### 🔧 数据生成
+- **批量生成**：可设置生成数据条数（默认10条）
+- **自动复制**：生成后自动复制JSON数据到剪贴板
+- **撤销功能**：一键清空所有配置
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### 🛠️ 操作功能
+- **添加字段**：通过表单添加新的数据字段
+- **修改字段**：抽屉式界面修改字段属性
+- **删除字段**：快速移除不需要的字段
 
-## Type Support for `.vue` Imports in TS
+## 使用流程
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### 1. 添加数据字段
+在顶部"添加新参数"区域配置：
+- 输入参数名称（支持字母、数字、下划线）
+- 选择数据类型
+- 根据类型设置相应参数（如长度、尺寸等）
+- 点击"添加参数"
 
-## Customize configuration
+### 2. 管理字段配置
+在表格区域可以：
+- 查看当前所有字段配置
+- 点击"修改"调整字段属性
+- 点击"删除"移除字段
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### 3. 生成JSON数据
+- 设置"数据长度"（生成多少条记录）
+- 点击"生成代码"按钮
+- 生成的数据会显示在页面下方并自动复制到剪贴板
 
-## Project Setup
+## 数据类型详解
 
-```sh
+| 类型      | 特性         | 可设置参数 |
+| --------- | ------------ | ---------- |
+| `string`  | 随机字符串   | 长度       |
+| `number`  | 随机整数     | 最大位数   |
+| `float`   | 随机浮点数   | 数值范围   |
+| `boolean` | 随机布尔值   | 无         |
+| `Date`    | ISO日期格式  | 无         |
+| `中文`    | 随机中文姓名 | 字符数量   |
+| `ID`      | UUID格式ID   | 无         |
+| `Image`   | 随机图片URL  | 宽度、高度 |
+| `Avatar`  | 随机头像URL  | 尺寸       |
+
+## 技术特点
+
+### 🎨 界面设计
+- **护眼配色**：采用米色、浅黄、浅绿等柔和色调
+- **响应式布局**：支持桌面端和移动端访问
+- **毛玻璃效果**：现代化UI风格
+
+### ⚡ 性能优化
+- 使用 Pinia 进行状态管理
+- 深拷贝功能避免数据污染
+- 丰富的工具函数支持
+
+### 📱 设备兼容
+- 支持现代浏览器
+- 移动端适配良好
+- 提供Vue DevTools调试支持
+
+## 快速开始
+
+```bash
+# 安装依赖
 pnpm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# 启动开发服务器
 pnpm dev
-```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
+# 构建生产版本
 pnpm build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
-```
+这个工具特别适用于前端开发中的Mock数据生成、API测试、组件演示等场景，帮助开发者快速获得符合结构要求的测试数据。
