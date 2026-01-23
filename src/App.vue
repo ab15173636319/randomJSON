@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElButton, ElInput, ElForm, ElFormItem } from 'element-plus'
+import { ElButton, ElInput, ElForm, ElFormItem, ElLoading } from 'element-plus'
 import { useFormStore } from './stores/form'
 import { ref } from 'vue'
 import type { IFormData } from './types'
@@ -8,14 +8,16 @@ import Header from './components/Header.vue'
 import Modify from './components/Modify.vue'
 import deepClone from './util/deepClone'
 import copyToClipboard from './util/copyToClipboard'
+import { storeToRefs } from 'pinia'
 const formStore = useFormStore()
 
 type ModifyInfo = Partial<IFormData>
 const modifyId = ref<string | null>(null)
 const modifyInfo = ref<ModifyInfo>({})
 const drawer = ref(false)
-const code = ref<string | object>('')
+const code = ref<string | undefined>('')
 const maxLen = ref<number>(10)
+const loading = ref(false)
 
 const modifyHandler = (id: string, show: boolean) => {
   modifyId.value = id
@@ -25,12 +27,23 @@ const modifyHandler = (id: string, show: boolean) => {
 }
 
 const randomCodeHandler = () => {
-  code.value = formStore.genrateJSON(maxLen.value)!
-  if (code.value) copyToClipboard(JSON.stringify(code.value).trim())
+  loading.value = true
+  formStore.genrateJSON(maxLen.value).then((res) => {
+    code.value = res
+  }).catch(error => {
+    console.log(error)
+  }).finally(() => {
+    loading.value = false
+  })
 }
 </script>
 
 <template>
+
+  <div class=" fixed inset-0 bg-black/50 z-99 flex justify-center items-center" v-show="loading">
+    <img class="size-15 animate-spin" src="/loading.svg" alt="" srcset="">
+  </div>
+
   <div class="app-container">
     <Header />
     <Table :data="formStore.form" @update:data="modifyHandler" />
@@ -106,7 +119,7 @@ const randomCodeHandler = () => {
   gap: 16px;
   box-shadow: 0 -4px 20px rgba(74, 74, 58, 0.08);
   border-top: 1px solid var(--border-color);
-  z-index: 100;
+  z-index: 5;
 }
 
 .form-wrapper {

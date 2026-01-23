@@ -9,6 +9,7 @@ import { generateAvatar, generateImage } from '@/util/genrateImage'
 import { ElMessage } from 'element-plus'
 
 export const useFormStore = defineStore('form', () => {
+  const loading = ref(false)
   const form = ref<IFormData[]>([
     {
       id: genrateId(),
@@ -39,50 +40,56 @@ export const useFormStore = defineStore('form', () => {
     }
   }
 
-  function genrateJSON(len: number = 10) {
+  async function genrateJSON(len: number = 10): Promise<string> {
     if (!form.value.length) {
       ElMessage.error('属性不能为空！')
-      return
+      return ''
     }
-    const json = []
-    for (let i = 0; i < len; i++) {
-      const obj: Record<string, string | number | boolean | Date> = {}
-      for (const item of form.value) {
-        switch (item.type) {
-          case '中文':
-            item.value = getRandomName(item.len || 2)
-            break
-          case 'Date':
-            item.value = genrateDate()
-            break
-          case 'number':
-            item.value = Math.floor(Math.random() * 10 ** (item.len! || 4))
-            break
-          case 'float':
-            item.value = Math.random() * (item.len || 100)
-            break
-          case 'boolean':
-            item.value = Math.random() > 0.5
-            break
-          case 'string':
-            item.value = randomString(item.len || 10)
-            break
-          case 'ID':
-            item.value = genrateId()
-            break
-          case 'Image':
-            item.value = generateImage(item.height || 200, item.width || 200)
-            break
-          case 'Avatar':
-            item.value = generateAvatar(item.size || 20)
-            break
+    return new Promise(async (resolve, reject) => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 300))
+        const json = []
+        for (let i = 0; i < len; i++) {
+          const obj: Record<string, string | number | boolean | Date> = {}
+          for (const item of form.value) {
+            switch (item.type) {
+              case '中文':
+                item.value = getRandomName(item.len || 2)
+                break
+              case 'Date':
+                item.value = genrateDate()
+                break
+              case 'number':
+                item.value = Math.floor(Math.random() * 10 ** (item.len! || 4))
+                break
+              case 'float':
+                item.value = Math.random() * (item.len || 100)
+                break
+              case 'boolean':
+                item.value = Math.random() > 0.5
+                break
+              case 'string':
+                item.value = randomString(item.len || 10)
+                break
+              case 'ID':
+                item.value = genrateId()
+                break
+              case 'Image':
+                item.value = generateImage(item.height || 200, item.width || 200)
+                break
+              case 'Avatar':
+                item.value = generateAvatar(item.size || 20)
+                break
+            }
+            obj[item.name] = item.value!
+          }
+          json.push(obj)
         }
-        obj[item.name] = item.value!
+        resolve(JSON.stringify(json))
+      } catch (error) {
+        reject(error)
       }
-      json.push(obj)
-    }
-
-    return JSON.stringify(json)
+    })
   }
 
   function revoke() {
@@ -91,6 +98,7 @@ export const useFormStore = defineStore('form', () => {
 
   return {
     form,
+    loading,
     addForm,
     removeForm,
     updateForm,
