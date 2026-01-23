@@ -30,6 +30,7 @@ const randomCodeHandler = () => {
   loading.value = true
   formStore.genrateJSON(maxLen.value).then((res) => {
     code.value = res
+    copyToClipboard(code.value)
   }).catch(error => {
     console.log(error)
   }).finally(() => {
