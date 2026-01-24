@@ -7,18 +7,12 @@ import { genrateDate } from '@/util/genrateDate'
 import { randomString } from '@/util/randomString'
 import { generateAvatar, generateImage } from '@/util/genrateImage'
 import { ElMessage } from 'element-plus'
+import randomEmail from '@/util/randomEmail.ts'
+import { randomPhonenumber } from '@/util/randomPhonenumber'
 
 export const useFormStore = defineStore('form', () => {
   const loading = ref(false)
-  const form = ref<IFormData[]>([
-    {
-      id: genrateId(),
-      name: 'name',
-      type: '中文',
-      value: '',
-      len: 2,
-    },
-  ])
+  const form = ref<IFormData[]>([])
 
   function addForm(data: IFormData) {
     form.value.push({
@@ -79,6 +73,12 @@ export const useFormStore = defineStore('form', () => {
                 break
               case 'Avatar':
                 item.value = generateAvatar(item.size || 20)
+                break
+              case 'Email':
+                item.value = randomEmail()
+                break
+              case 'Phone':
+                item.value = randomPhonenumber()
                 break
             }
             obj[item.name] = item.value!
