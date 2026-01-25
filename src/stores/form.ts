@@ -57,8 +57,8 @@ export const useFormStore = defineStore('form', () => {
                 item.value = Math.floor(Math.random() * 10 ** (item.len! || 4))
                 break
               case 'Float':
-                const integer = Math.ceil(Math.random() * (item.len || 100))
-                const decimal = Math.ceil(Math.random() * (item.decimal || 100))
+                const integer = Math.ceil(Math.random() * 10 ** item.integer!)
+                const decimal = Math.ceil(Math.random() * 10 ** item.decimal!)
                 item.value = Number(`${integer}.${decimal}`)
                 break
               case 'Boolean':
