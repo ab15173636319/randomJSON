@@ -49,6 +49,11 @@ const randomCodeHandler = () => {
     loading.value = false
   })
 }
+
+const revoke = () => {
+  code.value = ''
+  formStore.revoke()
+}
 </script>
 
 <template>
@@ -61,11 +66,13 @@ const randomCodeHandler = () => {
     <Header />
     <Table :data="formStore.form" @update:data="modifyHandler" />
 
-    <div class="code-display" v-if="code">
-      <pre class="code-wrapper">
+    <Transition mode="in-out">
+      <div class="code-display" v-show="code">
+        <pre class="code-wrapper">
           <code class="code-content">{{ code }}</code>
       </pre>
-    </div>
+      </div>
+    </Transition>
 
     <div class="bottom-panel">
       <div class="form-wrapper">
@@ -77,7 +84,7 @@ const randomCodeHandler = () => {
       </div>
       <div class="button-group">
         <el-button :disabled="disable" type="primary" @click="randomCodeHandler" class="action-btn">生成代码</el-button>
-        <el-button :disabled="disable" type="danger" @click="formStore.revoke()" class="action-btn"
+        <el-button :disabled="disable" type="danger" @click="revoke()" class="action-btn"
           style="margin: 0;">撤销</el-button>
       </div>
     </div>
@@ -86,6 +93,21 @@ const randomCodeHandler = () => {
 </template>
 
 <style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.5s ease;
+}
+
+.v-enter-from {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.v-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
