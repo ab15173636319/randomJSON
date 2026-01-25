@@ -38,19 +38,14 @@
 </template>
 
 <script setup lang="ts">
-import { ElButton, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton } from 'element-plus'
 import { useFormStore } from '@/stores/form'
-import { genrateId } from '@/util/genrateId'
-import { DataType, type IFormData } from '@/types'
-import { ref, Transition, TransitionGroup, watch } from 'vue'
+import { type IFormData } from '@/types'
+import { ref, TransitionGroup, watch } from 'vue'
 import { isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
 
 const drawer = ref(false)
 const formStore = useFormStore()
-
-watch(formStore.form, (newVal, _) => {
-  console.log(newVal);
-})
 
 const props = defineProps<{
   data: IFormData[]

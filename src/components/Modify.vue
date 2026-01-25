@@ -17,8 +17,7 @@
               </el-select>
             </el-form-item>
             <!-- 使用计算属性或方法判断显示哪些字段 -->
-            <el-form-item v-if="modifyInfo.type && isStringType(modifyInfo.type.toLowerCase())"
-              class="form-item">
+            <el-form-item v-if="modifyInfo.type && isStringType(modifyInfo.type.toLowerCase())" class="form-item">
               <el-input type="number" :min="0" v-model="modifyInfo.len" placeholder="请输入参数长度"
                 class="soft-input"></el-input>
             </el-form-item>
@@ -26,8 +25,7 @@
               <el-input type="number" :min="10" v-model="modifyInfo.size" placeholder="请输入头像尺寸"
                 class="soft-input"></el-input>
             </el-form-item>
-            <el-form-item v-if="modifyInfo.type && isImageType(modifyInfo.type)"
-              class="form-item image-form-item">
+            <el-form-item v-if="modifyInfo.type && isImageType(modifyInfo.type)" class="form-item image-form-item">
               <div class="image-inputs">
                 <el-input type="number" :min="10" v-model="modifyInfo.width" placeholder="宽度"
                   class="soft-input"></el-input>
@@ -59,9 +57,9 @@
 <script setup lang="ts">
 import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElOption, ElDrawer } from 'element-plus'
 import { DataType, type IFormData } from '@/types'
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useFormStore } from '@/stores/form'
-import { getInitialFieldValues, isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
+import { isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
 
 const formStore = useFormStore()
 

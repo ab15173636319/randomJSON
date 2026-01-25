@@ -10,6 +10,7 @@ const DataType = [
   'Avatar',
   'Email',
   'Phone',
+  '中文名',
 ]
 
 interface IFormData {

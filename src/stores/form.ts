@@ -10,6 +10,7 @@ import { ElMessage } from 'element-plus'
 import randomEmail from '@/util/randomEmail.ts'
 import { randomPhonenumber } from '@/util/randomPhonenumber'
 import { isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
+import genrateChineseName from '@/util/genrateChineseName'
 
 export const useFormStore = defineStore('form', () => {
   const loading = ref(false)
@@ -83,6 +84,9 @@ export const useFormStore = defineStore('form', () => {
                 break
               case 'Phone':
                 item.value = randomPhonenumber()
+                break
+              case '中文名':
+                item.value = await genrateChineseName()
                 break
             }
             obj[item.name] = item.value!

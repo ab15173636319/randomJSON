@@ -8,8 +8,7 @@ import Header from './components/Header.vue'
 import Modify from './components/Modify.vue'
 import deepClone from './util/deepClone'
 import copyToClipboard from './util/copyToClipboard'
-import { storeToRefs } from 'pinia'
-import { getInitialFieldValues, isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
+import { getInitialFieldValues } from '@/util/typeUtils'
 
 const formStore = useFormStore()
 
@@ -27,7 +26,7 @@ const disable = computed(() => {
 
 watch(() => modifyInfo.value.type, (newVal, _) => {
   if (!newVal) return
-  
+
   // 使用工具函数简化逻辑
   Object.assign(modifyInfo.value, getInitialFieldValues(newVal))
 })

@@ -52,11 +52,11 @@ import {
   type FormInstance,
   ElMessage
 } from 'element-plus'
-import { computed, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useFormStore } from '@/stores/form'
 import { genrateId } from '@/util/genrateId'
 import { DataType, type IFormData } from '@/types'
-import { getInitialFieldValues, isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
+import { getInitialFieldValues } from '@/util/typeUtils'
 
 const formRef = ref<FormInstance | null>()
 const formStore = useFormStore()
