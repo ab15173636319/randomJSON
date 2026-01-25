@@ -16,19 +16,29 @@
                 <el-option v-for="item in DataType" :key="item" :label="item" :value="item"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item v-if="['string', 'number', 'float', '中文'].includes(modifyInfo.type!)" class="form-item">
+            <el-form-item v-if="modifyInfo.type && ['string', 'number', 'float', '中文'].includes(modifyInfo.type)"
+              class="form-item">
               <el-input type="number" :min="0" v-model="modifyInfo.len" placeholder="请输入参数长度"
                 class="soft-input"></el-input>
             </el-form-item>
-            <el-form-item v-if="['Avatar'].includes(modifyInfo.type!)" class="form-item">
+            <el-form-item v-if="modifyInfo.type && ['Avatar'].includes(modifyInfo.type)" class="form-item">
               <el-input type="number" :min="10" v-model="modifyInfo.size" placeholder="请输入头像尺寸"
                 class="soft-input"></el-input>
             </el-form-item>
-            <el-form-item v-if="['Image'].includes(modifyInfo.type!)" class="form-item image-form-item">
+            <el-form-item v-if="modifyInfo.type && ['Image'].includes(modifyInfo.type)"
+              class="form-item image-form-item">
               <div class="image-inputs">
                 <el-input type="number" :min="10" v-model="modifyInfo.width" placeholder="宽度"
                   class="soft-input"></el-input>
                 <el-input type="number" :min="10" v-model="modifyInfo.height" placeholder="高度"
+                  class="soft-input"></el-input>
+              </div>
+            </el-form-item>
+            <el-form-item v-if="modifyInfo.type && ['Float'].includes(modifyInfo.type)" class="form-item">
+              <div class="flex gap-10">
+                <el-input type="number" :min="1" v-model="modifyInfo.integer" placeholder="请输入浮点数整数长度"
+                  class="soft-input"></el-input>
+                <el-input type="number" :min="1" v-model="modifyInfo.decimal" placeholder="请输入浮点数小鼠长度"
                   class="soft-input"></el-input>
               </div>
             </el-form-item>
@@ -74,10 +84,6 @@ const localDrawer = computed({
 const closeHandler = () => {
   localDrawer.value = false
 }
-
-const needDisable2 = computed(() => {
-  return ['Date', 'boolean', 'ID'].includes(props.modifyInfo.type!)
-})
 
 const updateForm = () => {
   if (!props.modifyId) return

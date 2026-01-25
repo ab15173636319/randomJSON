@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ElButton, ElInput, ElForm, ElFormItem, ElLoading } from 'element-plus'
 import { useFormStore } from './stores/form'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { IFormData } from './types'
 import Table from './components/Table.vue'
 import Header from './components/Header.vue'
@@ -19,6 +19,27 @@ const code = ref<string | undefined>('')
 const maxLen = ref<number>(10)
 const loading = ref(false)
 
+const disable = computed(() => {
+  return formStore.form.length <= 0
+})
+
+watch(() => modifyInfo.value.type, (newVal, _) => {
+  if (!newVal) return
+  if (['String', 'Number', '中文'].includes(newVal)) {
+    modifyInfo.value.len = 10
+  }
+  if (['Float'].includes(newVal)) {
+    modifyInfo.value.integer = 10
+    modifyInfo.value.decimal = 2
+  }
+  if (['Avatar'].includes(newVal)) {
+    modifyInfo.value.size = 100
+  }
+  if (['Image'].includes(newVal)) {
+    modifyInfo.value.width = 400
+    modifyInfo.value.height = 300
+  }
+})
 const modifyHandler = (id: string, show: boolean) => {
   modifyId.value = id
   drawer.value = show
@@ -64,8 +85,9 @@ const randomCodeHandler = () => {
         </el-form>
       </div>
       <div class="button-group">
-        <el-button type="primary" @click="randomCodeHandler" class="action-btn">生成代码</el-button>
-        <el-button type="danger" @click="formStore.revoke()" class="action-btn" style="margin: 0;">撤销</el-button>
+        <el-button :disabled="disable" type="primary" @click="randomCodeHandler" class="action-btn">生成代码</el-button>
+        <el-button :disabled="disable" type="danger" @click="formStore.revoke()" class="action-btn"
+          style="margin: 0;">撤销</el-button>
       </div>
     </div>
   </div>

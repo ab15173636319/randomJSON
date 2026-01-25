@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { genrateId } from '@/util/genrateId'
-import type { IFormData, UUID } from '@/types/index'
+import type { IFormData } from '@/types/index'
 import getRandomName from '@/util/genrateName'
 import { genrateDate } from '@/util/genrateDate'
 import { randomString } from '@/util/randomString'
@@ -53,16 +53,18 @@ export const useFormStore = defineStore('form', () => {
               case 'Date':
                 item.value = genrateDate()
                 break
-              case 'number':
+              case 'Number':
                 item.value = Math.floor(Math.random() * 10 ** (item.len! || 4))
                 break
-              case 'float':
-                item.value = Math.random() * (item.len || 100)
+              case 'Float':
+                const integer = Math.ceil(Math.random() * (item.len || 100))
+                const decimal = Math.ceil(Math.random() * (item.decimal || 100))
+                item.value = Number(`${integer}.${decimal}`)
                 break
-              case 'boolean':
+              case 'Boolean':
                 item.value = Math.random() > 0.5
                 break
-              case 'string':
+              case 'String':
                 item.value = randomString(item.len || 10)
                 break
               case 'ID':
@@ -93,7 +95,7 @@ export const useFormStore = defineStore('form', () => {
   }
 
   function revoke() {
-    form.value = []
+    form.value.splice(0)
   }
 
   return {

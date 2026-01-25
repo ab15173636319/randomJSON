@@ -11,8 +11,16 @@
             <el-option v-for="item in DataType" :key="item" :label="item" :value="item"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="['string', 'number', 'float', '中文'].includes(param.type)" class="form-item">
+        <el-form-item v-if="['String', 'Number', '中文'].includes(param.type)" class="form-item">
           <el-input type="number" :min="0" v-model="param.len" placeholder="请输入参数长度" class="soft-input"></el-input>
+        </el-form-item>
+        <el-form-item v-if="['Float'].includes(param.type)" class="form-item">
+          <div class="flex gap-10">
+            <el-input type="number" :min="1" v-model="param.integer" placeholder="请输入浮点数整数长度"
+              class="soft-input"></el-input>
+            <el-input type="number" :min="1" v-model="param.decimal" placeholder="请输入浮点数小鼠长度"
+              class="soft-input"></el-input>
+          </div>
         </el-form-item>
         <el-form-item v-if="['Avatar'].includes(param.type)" class="form-item">
           <el-input type="number" :min="10" v-model="param.size" placeholder="请输入头像尺寸" class="soft-input"></el-input>
@@ -41,15 +49,13 @@ import {
   ElHeader,
   ElSelect,
   ElOption,
-  ElRadioGroup,
-  ElRadio,
   type FormInstance,
-  ElMessage,
+  ElMessage
 } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
 import { useFormStore } from '@/stores/form'
 import { genrateId } from '@/util/genrateId'
-import { DataType, NumberType, type IFormData } from '@/types'
+import { DataType, type IFormData } from '@/types'
 const formRef = ref<FormInstance | null>()
 const formStore = useFormStore()
 
@@ -69,46 +75,47 @@ const rules = {
 const param = reactive<IFormData>({
   id: genrateId(),
   name: '',
-  type: 'string',
+  type: 'String',
+  len: 10,
+  width: undefined,
+  height: undefined,
+  size: undefined,
+  integer: undefined,
+  decimal: undefined,
 })
 
-const typeConfigDefaults = {
-  string: { len: 10 },
-  number: { len: 10 },
-  float: { len: 10 },
-  中文: { len: 10 },
-  Image: { width: 100, height: 100 },
-  Avatar: { size: 100 }
-}
+watch(() => param.type, (newVal, _) => {
+  console.log(newVal);
 
+  if (['String', 'Number', '中文'].includes(newVal)) {
+    param.len = 10
+  }
+
+  if (['Float'].includes(newVal)) {
+    param.integer = 10
+    param.decimal = 2
+  }
+
+  if (['Avatar'].includes(newVal)) {
+    param.size = 100
+  }
+
+  if (['Image'].includes(newVal)) {
+    param.width = 400
+    param.height = 300
+  }
+})
+
+
+// 重置表单
 const reset = () => {
   Object.assign(param, {
     id: param.id,
     name: '',
-    type: 'string',
-    len: undefined,
-    width: undefined,
-    height: undefined,
-    size: undefined
+    type: 'String',
+    len: 10,
   })
 }
-
-watch(
-  () => param.type,
-  (newType) => {
-    // 检查是否有对应的默认配置
-    const defaultConfig = typeConfigDefaults[newType as keyof typeof typeConfigDefaults]
-
-    if (defaultConfig) {
-      Object.entries(defaultConfig).forEach(([key, value]) => {
-        if (!(key in param) || param[key as keyof IFormData] === undefined) {
-          (param as any)[key] = value
-        }
-      })
-    }
-  },
-  { immediate: true }
-)
 
 const addToForm = async () => {
   const res = await formRef.value?.validate()

@@ -12,10 +12,6 @@ const DataType = [
   'Phone',
 ]
 
-const NumberType = [1, 3, 4, 5, 6, 7]
-
-type UUID = (typeof NumberType)[number]
-
 interface IFormData {
   id: string
   name: string
@@ -25,8 +21,9 @@ interface IFormData {
   size?: number | null
   width?: number | null
   height?: number | null
-  v?: UUID
+  integer?: number
+  decimal?: number
 }
 
-export type { IFormData, UUID }
-export { DataType, NumberType }
+export type { IFormData }
+export { DataType }

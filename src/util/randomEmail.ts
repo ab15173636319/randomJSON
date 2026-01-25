@@ -11,7 +11,7 @@ function randomPrefix(len: number): string {
 
 function randomSuffix(): string {
   let suffix = ''
-  const index = Math.min(Math.floor(Math.random() * 6), 2)
+  const index = Math.max(Math.floor(Math.random() * 6), 2)
   for (let i = 0; i < index; i++) {
     const _index = Math.floor(Math.random() * 4)
     suffix += str[_index]
@@ -20,6 +20,6 @@ function randomSuffix(): string {
 }
 
 export default function randomEmail(): string {
-  const len = Math.min(Math.floor(Math.random() * 16), 5)
+  const len = Math.max(Math.floor(Math.random() * 16), 5)
   return randomPrefix(len) + '@' + randomSuffix() + '.com'
 }

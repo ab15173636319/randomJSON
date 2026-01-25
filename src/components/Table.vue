@@ -17,9 +17,11 @@
             <td class=" text-center ">{{ item.name }}</td>
             <td class="text-center">{{ item.type }}</td>
             <td class="text-center">
-              <span v-if="item.len">{{ item.len }}</span>
-              <span v-if="item.size">{{ item.size }}</span>
-              <span v-if="item.width && item.height">{{ item.width + 'x' + item.height }}</span>
+              <span v-if="['String', 'Number', '中文'].includes(item.type)">{{ item.len }}</span>
+              <span v-else-if="['Float'].includes(item.type)">{{ item.integer + 'x' + item.decimal }}</span>
+              <span v-else-if="['Image'].includes(item.type)">{{ item.width + 'x' + item.height }}</span>
+              <span v-else-if="['Avatar'].includes(item.type)">{{ item.size }}</span>
+              <span v-else>————</span>
             </td>
             <td>
               <div class="flex justify-center items-center">
@@ -30,33 +32,6 @@
           </tr>
         </transition-group>
       </table>
-
-
-      <!-- <el-table :data="data" class="soft-table" stripe>
-        <el-table-column label="属性名" prop="name" min-width="120"></el-table-column>
-        <el-table-column label="数据类型" prop="type" min-width="100"></el-table-column>
-        <el-table-column label="长度（可选）" min-width="120">
-          <template #default="scope">
-            <span v-if="['string', 'number', 'float', '中文'].includes(scope.row.type)" class="value-text">
-              {{ scope.row.len }}
-            </span>
-            <span v-if="['Avatar'].includes(scope.row.type)" class="value-text">
-              {{ scope.row.size }}
-            </span>
-            <span v-if="['Image'].includes(scope.row.type)" class="value-text">
-              {{ scope.row.width + 'x' + scope.row.height }}
-            </span>
-          </template>
-</el-table-column>
-<el-table-column label="操作" min-width="140" fixed="right">
-  <template #default="scope">
-            <div class="action-buttons">
-              <el-button type="primary" link @click="modifyItem(scope.row.id)" class="action-link">修改</el-button>
-              <el-button type="danger" link @click="removeFromItem(scope.row.id)" class="action-link">删除</el-button>
-            </div>
-          </template>
-</el-table-column>
-</el-table> -->
     </div>
   </div>
 </template>
@@ -66,10 +41,14 @@ import { ElButton, ElTable, ElTableColumn } from 'element-plus'
 import { useFormStore } from '@/stores/form'
 import { genrateId } from '@/util/genrateId'
 import { DataType, type IFormData } from '@/types'
-import { ref, Transition, TransitionGroup } from 'vue'
+import { ref, Transition, TransitionGroup, watch } from 'vue'
 
 const drawer = ref(false)
 const formStore = useFormStore()
+
+watch(formStore.form, (newVal, _) => {
+  console.log(newVal);
+})
 
 const props = defineProps<{
   data: IFormData[]
