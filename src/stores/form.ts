@@ -9,6 +9,7 @@ import { generateAvatar, generateImage } from '@/util/genrateImage'
 import { ElMessage } from 'element-plus'
 import randomEmail from '@/util/randomEmail.ts'
 import { randomPhonenumber } from '@/util/randomPhonenumber'
+import { isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
 
 export const useFormStore = defineStore('form', () => {
   const loading = ref(false)
@@ -54,12 +55,13 @@ export const useFormStore = defineStore('form', () => {
                 item.value = genrateDate()
                 break
               case 'Number':
-                item.value = Math.floor(Math.random() * 10 ** (item.len! || 4))
+                item.value = Math.floor(Math.random() * (Math.pow(10, item.len || 4) - 1))
                 break
               case 'Float':
-                const integer = Math.ceil(Math.random() * 10 ** item.integer!)
-                const decimal = Math.ceil(Math.random() * 10 ** item.decimal!)
-                item.value = Number(`${integer}.${decimal}`)
+                // 修复浮点数生成逻辑
+                const integerPart = Math.floor(Math.random() * Math.pow(10, item.integer || 10))
+                const decimalPart = Math.floor(Math.random() * Math.pow(10, item.decimal || 2))
+                item.value = Number(`${integerPart}.${decimalPart}`)
                 break
               case 'Boolean':
                 item.value = Math.random() > 0.5

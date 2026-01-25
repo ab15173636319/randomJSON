@@ -56,6 +56,8 @@ import { computed, reactive, ref, watch } from 'vue'
 import { useFormStore } from '@/stores/form'
 import { genrateId } from '@/util/genrateId'
 import { DataType, type IFormData } from '@/types'
+import { getInitialFieldValues, isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
+
 const formRef = ref<FormInstance | null>()
 const formStore = useFormStore()
 
@@ -85,25 +87,7 @@ const param = reactive<IFormData>({
 })
 
 watch(() => param.type, (newVal, _) => {
-  console.log(newVal);
-
-  if (['String', 'Number', '中文'].includes(newVal)) {
-    param.len = 10
-  }
-
-  if (['Float'].includes(newVal)) {
-    param.integer = 10
-    param.decimal = 2
-  }
-
-  if (['Avatar'].includes(newVal)) {
-    param.size = 100
-  }
-
-  if (['Image'].includes(newVal)) {
-    param.width = 400
-    param.height = 300
-  }
+  Object.assign(param, getInitialFieldValues(newVal))
 })
 
 

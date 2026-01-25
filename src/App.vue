@@ -9,6 +9,8 @@ import Modify from './components/Modify.vue'
 import deepClone from './util/deepClone'
 import copyToClipboard from './util/copyToClipboard'
 import { storeToRefs } from 'pinia'
+import { getInitialFieldValues, isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
+
 const formStore = useFormStore()
 
 type ModifyInfo = Partial<IFormData>
@@ -25,21 +27,11 @@ const disable = computed(() => {
 
 watch(() => modifyInfo.value.type, (newVal, _) => {
   if (!newVal) return
-  if (['String', 'Number', '中文'].includes(newVal)) {
-    modifyInfo.value.len = 10
-  }
-  if (['Float'].includes(newVal)) {
-    modifyInfo.value.integer = 10
-    modifyInfo.value.decimal = 2
-  }
-  if (['Avatar'].includes(newVal)) {
-    modifyInfo.value.size = 100
-  }
-  if (['Image'].includes(newVal)) {
-    modifyInfo.value.width = 400
-    modifyInfo.value.height = 300
-  }
+  
+  // 使用工具函数简化逻辑
+  Object.assign(modifyInfo.value, getInitialFieldValues(newVal))
 })
+
 const modifyHandler = (id: string, show: boolean) => {
   modifyId.value = id
   drawer.value = show

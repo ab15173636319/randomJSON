@@ -17,10 +17,11 @@
             <td class=" text-center ">{{ item.name }}</td>
             <td class="text-center">{{ item.type }}</td>
             <td class="text-center">
-              <span v-if="['String', 'Number', '中文'].includes(item.type)">{{ item.len }}</span>
-              <span v-else-if="['Float'].includes(item.type)">{{ item.integer + 'x' + item.decimal }}</span>
-              <span v-else-if="['Image'].includes(item.type)">{{ item.width + 'x' + item.height }}</span>
-              <span v-else-if="['Avatar'].includes(item.type)">{{ item.size }}</span>
+              <!-- 使用工具函数简化判断 -->
+              <span v-if="isStringType(item.type)">{{ item.len }}</span>
+              <span v-else-if="isFloatType(item.type)">{{ item.integer + 'x' + item.decimal }}</span>
+              <span v-else-if="isImageType(item.type)">{{ item.width + 'x' + item.height }}</span>
+              <span v-else-if="isAvatarType(item.type)">{{ item.size }}</span>
               <span v-else>————</span>
             </td>
             <td>
@@ -42,6 +43,7 @@ import { useFormStore } from '@/stores/form'
 import { genrateId } from '@/util/genrateId'
 import { DataType, type IFormData } from '@/types'
 import { ref, Transition, TransitionGroup, watch } from 'vue'
+import { isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
 
 const drawer = ref(false)
 const formStore = useFormStore()

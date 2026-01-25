@@ -16,16 +16,17 @@
                 <el-option v-for="item in DataType" :key="item" :label="item" :value="item"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item v-if="modifyInfo.type && ['string', 'number', 'float', '中文'].includes(modifyInfo.type)"
+            <!-- 使用计算属性或方法判断显示哪些字段 -->
+            <el-form-item v-if="modifyInfo.type && isStringType(modifyInfo.type.toLowerCase())"
               class="form-item">
               <el-input type="number" :min="0" v-model="modifyInfo.len" placeholder="请输入参数长度"
                 class="soft-input"></el-input>
             </el-form-item>
-            <el-form-item v-if="modifyInfo.type && ['Avatar'].includes(modifyInfo.type)" class="form-item">
+            <el-form-item v-if="modifyInfo.type && isAvatarType(modifyInfo.type)" class="form-item">
               <el-input type="number" :min="10" v-model="modifyInfo.size" placeholder="请输入头像尺寸"
                 class="soft-input"></el-input>
             </el-form-item>
-            <el-form-item v-if="modifyInfo.type && ['Image'].includes(modifyInfo.type)"
+            <el-form-item v-if="modifyInfo.type && isImageType(modifyInfo.type)"
               class="form-item image-form-item">
               <div class="image-inputs">
                 <el-input type="number" :min="10" v-model="modifyInfo.width" placeholder="宽度"
@@ -34,11 +35,11 @@
                   class="soft-input"></el-input>
               </div>
             </el-form-item>
-            <el-form-item v-if="modifyInfo.type && ['Float'].includes(modifyInfo.type)" class="form-item">
+            <el-form-item v-if="modifyInfo.type && isFloatType(modifyInfo.type)" class="form-item">
               <div class="flex gap-10">
                 <el-input type="number" :min="1" v-model="modifyInfo.integer" placeholder="请输入浮点数整数长度"
                   class="soft-input"></el-input>
-                <el-input type="number" :min="1" v-model="modifyInfo.decimal" placeholder="请输入浮点数小鼠长度"
+                <el-input type="number" :min="1" v-model="modifyInfo.decimal" placeholder="请输入浮点数小数长度"
                   class="soft-input"></el-input>
               </div>
             </el-form-item>
@@ -60,6 +61,8 @@ import { ElForm, ElFormItem, ElInput, ElButton, ElSelect, ElOption, ElDrawer } f
 import { DataType, type IFormData } from '@/types'
 import { computed, ref, watch } from 'vue'
 import { useFormStore } from '@/stores/form'
+import { getInitialFieldValues, isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
+
 const formStore = useFormStore()
 
 const props = defineProps<{
