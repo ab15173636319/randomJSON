@@ -59,7 +59,6 @@ export const useFormStore = defineStore('form', () => {
                 item.value = Math.floor(Math.random() * (Math.pow(10, item.len || 4) - 1))
                 break
               case 'Float':
-                // 修复浮点数生成逻辑
                 const integerPart = Math.floor(Math.random() * Math.pow(10, item.integer || 10))
                 const decimalPart = Math.floor(Math.random() * Math.pow(10, item.decimal || 2))
                 item.value = Number(`${integerPart}.${decimalPart}`)
