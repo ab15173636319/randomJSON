@@ -2,10 +2,10 @@
 // 姓氏和名的文件在public目录下的firstName.json和lastName.json
 
 // 用于缓存数据
-let nameData: { firstName: string[], lastName: string[] } | null = null
+let nameData: { firstName: string[]; lastName: string[] } | null = null
 
-async function init(): Promise<{ firstName: string[], lastName: string[] }> {
-  // 如果以获取到数据，返回已有的数据
+async function init(): Promise<{ firstName: string[]; lastName: string[] }> {
+  // 如果已获取到数据，返回已有的数据
   if (nameData) return nameData
 
   try {
@@ -25,8 +25,8 @@ async function init(): Promise<{ firstName: string[], lastName: string[] }> {
       lastNameData.json(),
     ])
 
-    if (firstName.length === 0) throw new Error("姓名数据格式错误，必须是数组")
-    if (lastName.length === 0) throw new Error("姓名数据为空，无法生成姓名")
+    if (firstName.length === 0) throw new Error('姓名数据格式错误，必须是数组')
+    if (lastName.length === 0) throw new Error('姓名数据为空，无法生成姓名')
 
     // 缓存数据
     nameData = {
@@ -38,11 +38,9 @@ async function init(): Promise<{ firstName: string[], lastName: string[] }> {
   } catch (error) {
     throw new Error(`初始化姓名数据失败: ${error}`)
   }
-
 }
 
-
-export default async function genrateChineseName(): Promise<string> {
+export default async function generateChineseName(): Promise<string> {
   const { firstName, lastName } = await init()
 
   if (!firstName || !lastName) throw new Error('姓和名数据为空，无法生成姓名')
@@ -53,3 +51,5 @@ export default async function genrateChineseName(): Promise<string> {
 
   return `${firstName[firstNameIndex]}${lastName[lastNameIndex]}`
 }
+
+

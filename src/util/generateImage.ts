@@ -76,3 +76,5 @@ export function generateAvatar(size: number = 200, fixedId: boolean = false): st
 
   return `${url}?${params.join('&')}`
 }
+
+

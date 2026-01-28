@@ -54,7 +54,7 @@ import {
 } from 'element-plus'
 import { reactive, ref, watch } from 'vue'
 import { useFormStore } from '@/stores/form'
-import { genrateId } from '@/util/genrateId'
+import { generateId } from '@/util/generateId'
 import { DataType, type IFormData } from '@/types'
 import { getInitialFieldValues } from '@/util/typeUtils'
 
@@ -75,7 +75,7 @@ const rules = {
 }
 
 const param = reactive<IFormData>({
-  id: genrateId(),
+  id: generateId(),
   name: '',
   type: 'String',
   len: 10,

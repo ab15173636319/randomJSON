@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { IFormData } from '@/types/index'
-import genrateJson from '@/util/generateJson'
+import generateJson from '@/util/generateJson'
 
 export const useFormStore = defineStore('form', () => {
   const form = ref<IFormData[]>([])
@@ -27,11 +27,11 @@ export const useFormStore = defineStore('form', () => {
     }
   }
 
-  async function genrateJSON(len: number = 10): Promise<string> {
+  async function generateJSON(len: number = 10): Promise<string> {
     try {
       return new Promise(async (resolve, reject) => {
         try {
-          const result = await genrateJson(len, form.value)
+          const result = await generateJson(len, form.value)
           resolve(result)
         } catch (error) {
           reject(error)
@@ -52,7 +52,7 @@ export const useFormStore = defineStore('form', () => {
     addForm,
     removeForm,
     updateForm,
-    genrateJSON,
+    generateJSON,
     revoke,
   }
 })

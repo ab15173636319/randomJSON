@@ -41,7 +41,7 @@ const modifyHandler = (id: string, show: boolean) => {
 const randomCodeHandler = async () => {
   loading.value = true
   try {
-    code.value = await formStore.genrateJSON(maxLen.value)
+    code.value = await formStore.generateJSON(maxLen.value)
   } catch (error) {
     ElMessage.error('生成失败！')
     console.error(error)

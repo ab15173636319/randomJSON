@@ -1,13 +1,13 @@
-import type { IFormData } from "@/types";
-import getRandomName from "./genrateName";
-import { genrateDate } from "./genrateDate";
-import { randomString } from "./randomString";
-import { genrateId } from "./genrateId";
-import { generateAvatar, generateImage } from "./genrateImage";
-import randomEmail from "./randomEmail";
-import { randomPhonenumber } from "./randomPhonenumber";
-import genrateChineseName from "./genrateChineseName";
-import { ElMessage } from "element-plus";
+import type { IFormData } from '@/types'
+import getRandomName from './generateName'
+import { generateDate } from './generateDate'
+import { randomString } from './randomString'
+import { generateId } from './generateId'
+import { generateAvatar, generateImage } from './generateImage'
+import randomEmail from './randomEmail'
+import { randomPhonenumber } from './randomPhonenumber'
+import generateChineseName from './generateChineseName'
+import { ElMessage } from 'element-plus'
 
 // 根据类型生成值
 async function getRandomValue(item: IFormData): Promise<string | number | boolean | Date> {
@@ -15,7 +15,7 @@ async function getRandomValue(item: IFormData): Promise<string | number | boolea
     case '中文':
       return getRandomName(item.len || 2)
     case 'Date':
-      return genrateDate()
+      return generateDate()
     case 'Number':
       return Math.floor(Math.random() * (Math.pow(10, item.len || 4) - 1))
     case 'Float':
@@ -27,7 +27,7 @@ async function getRandomValue(item: IFormData): Promise<string | number | boolea
     case 'String':
       return randomString(item.len || 10)
     case 'ID':
-      return genrateId()
+      return generateId()
     case 'Image':
       return generateImage(item.height || 200, item.width || 200)
     case 'Avatar':
@@ -37,7 +37,7 @@ async function getRandomValue(item: IFormData): Promise<string | number | boolea
     case 'Phone':
       return randomPhonenumber()
     case '中文名':
-      return await genrateChineseName()
+      return await generateChineseName()
     default:
       return ''
   }
@@ -50,7 +50,7 @@ async function getRandomValue(item: IFormData): Promise<string | number | boolea
  * @param form 表单数据
  * @returns 生成结果json字符串
  */
-export default async function genrateJson(len: number, form: IFormData[]): Promise<string> {
+export default async function generateJson(len: number, form: IFormData[]): Promise<string> {
   if (form.length === 0) {
     ElMessage.error('属性不能为空！')
     return ''
