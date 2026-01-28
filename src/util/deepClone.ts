@@ -1,20 +1,6 @@
+type DeepCloneTarget = number | string | boolean | null | undefined | Date | RegExp | Map<unknown, unknown> | Set<unknown> | unknown[] | Record<string, unknown> | object
 
-
-export default function deepClone<
-  T extends
-  | number
-  | string
-  | boolean
-  | null
-  | undefined
-  | Date
-  | RegExp
-  | Map<unknown, unknown>
-  | Set<unknown>
-  | unknown[]
-  | Record<string, unknown>
-  | object,
->(target: T, cache = new WeakMap<object, unknown>()): T {
+export default function deepClone<T extends DeepCloneTarget>(target: T, cache = new WeakMap<object, unknown>()): T {
   // 如果是基本类型或 null，直接返回
   if (typeof target !== 'object' || target === null) {
     return target
@@ -43,40 +29,15 @@ export default function deepClone<
   if (target instanceof Map) {
     const clone = new Map<unknown, unknown>()
     cache.set(target as object, clone)
-
     // 键和值都要深度拷贝，否则会出现引用问题
     for (const [key, value] of target.entries()) {
       clone.set(
         deepClone(
-          key as
-          | string
-          | number
-          | boolean
-          | object
-          | RegExp
-          | Date
-          | Map<unknown, unknown>
-          | Set<unknown>
-          | unknown[]
-          | Record<string, unknown>
-          | null
-          | undefined,
+          key as DeepCloneTarget,
           cache,
         ),
         deepClone(
-          value as
-          | string
-          | number
-          | boolean
-          | object
-          | RegExp
-          | Date
-          | Map<unknown, unknown>
-          | Set<unknown>
-          | unknown[]
-          | Record<string, unknown>
-          | null
-          | undefined,
+          value as DeepCloneTarget,
           cache,
         ),
       )
@@ -92,19 +53,7 @@ export default function deepClone<
     target.forEach((item) => {
       clone.add(
         deepClone(
-          item as
-          | string
-          | number
-          | boolean
-          | object
-          | RegExp
-          | Date
-          | Map<unknown, unknown>
-          | Set<unknown>
-          | unknown[]
-          | Record<string, unknown>
-          | null
-          | undefined,
+          item as DeepCloneTarget,
           cache,
         ),
       )
@@ -112,26 +61,14 @@ export default function deepClone<
     return clone as T
   }
 
-  // 处理数组
+  // 处理数组，返回新的数组
   if (Array.isArray(target)) {
     const clone: unknown[] = []
     cache.set(target as object, clone)
     for (const item of target) {
       clone.push(
         deepClone(
-          item as
-          | string
-          | number
-          | boolean
-          | object
-          | RegExp
-          | Date
-          | Map<unknown, unknown>
-          | Set<unknown>
-          | unknown[]
-          | Record<string, unknown>
-          | null
-          | undefined,
+          item as DeepCloneTarget,
           cache,
         ),
       )
@@ -139,9 +76,9 @@ export default function deepClone<
     return clone as T
   }
 
+  // 处理对象，返回新的对象
   const newObj: Record<string, unknown> = {}
   cache.set(target as object, newObj)
-
   for (const key in target as Record<string, unknown>) {
     if (!Object.prototype.hasOwnProperty.call(target, key)) continue
     const value = (target as Record<string, unknown>)[key]
