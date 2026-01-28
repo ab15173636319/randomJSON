@@ -1,19 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { genrateId } from '@/util/genrateId'
 import type { IFormData } from '@/types/index'
-import getRandomName from '@/util/genrateName'
-import { genrateDate } from '@/util/genrateDate'
-import { randomString } from '@/util/randomString'
-import { generateAvatar, generateImage } from '@/util/genrateImage'
-import { ElMessage } from 'element-plus'
-import randomEmail from '@/util/randomEmail.ts'
-import { randomPhonenumber } from '@/util/randomPhonenumber'
-import { isStringType, isFloatType, isAvatarType, isImageType } from '@/util/typeUtils'
-import genrateChineseName from '@/util/genrateChineseName'
+import genrateJson from '@/util/generateJson'
 
 export const useFormStore = defineStore('form', () => {
-  const loading = ref(false)
   const form = ref<IFormData[]>([])
 
   function addForm(data: IFormData) {
@@ -26,6 +16,7 @@ export const useFormStore = defineStore('form', () => {
     form.value = form.value.filter((item) => item.id !== id)
   }
 
+  // 更新表单数据
   function updateForm(id: string, data: Partial<IFormData>) {
     const index = form.value.findIndex((item) => item.id === id)
     if (index !== -1 && form.value[index]) {
@@ -37,66 +28,19 @@ export const useFormStore = defineStore('form', () => {
   }
 
   async function genrateJSON(len: number = 10): Promise<string> {
-    if (!form.value.length) {
-      ElMessage.error('属性不能为空！')
-      return ''
-    }
-    return new Promise(async (resolve, reject) => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 300))
-        const json = []
-        for (let i = 0; i < len; i++) {
-          const obj: Record<string, string | number | boolean | Date> = {}
-          for (const item of form.value) {
-            switch (item.type) {
-              case '中文':
-                item.value = getRandomName(item.len || 2)
-                break
-              case 'Date':
-                item.value = genrateDate()
-                break
-              case 'Number':
-                item.value = Math.floor(Math.random() * (Math.pow(10, item.len || 4) - 1))
-                break
-              case 'Float':
-                const integerPart = Math.floor(Math.random() * Math.pow(10, item.integer || 10))
-                const decimalPart = Math.floor(Math.random() * Math.pow(10, item.decimal || 2))
-                item.value = Number(`${integerPart}.${decimalPart}`)
-                break
-              case 'Boolean':
-                item.value = Math.random() > 0.5
-                break
-              case 'String':
-                item.value = randomString(item.len || 10)
-                break
-              case 'ID':
-                item.value = genrateId()
-                break
-              case 'Image':
-                item.value = generateImage(item.height || 200, item.width || 200)
-                break
-              case 'Avatar':
-                item.value = generateAvatar(item.size || 20)
-                break
-              case 'Email':
-                item.value = randomEmail()
-                break
-              case 'Phone':
-                item.value = randomPhonenumber()
-                break
-              case '中文名':
-                item.value = await genrateChineseName()
-                break
-            }
-            obj[item.name] = item.value!
-          }
-          json.push(obj)
+    try {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const result = await genrateJson(len, form.value)
+          resolve(result)
+        } catch (error) {
+          reject(error)
         }
-        resolve(JSON.stringify(json))
-      } catch (error) {
-        reject(error)
-      }
-    })
+      })
+    } catch (error) {
+      console.error(error)
+      throw new Error('生成失败！')
+    }
   }
 
   function revoke() {
@@ -105,7 +49,6 @@ export const useFormStore = defineStore('form', () => {
 
   return {
     form,
-    loading,
     addForm,
     removeForm,
     updateForm,

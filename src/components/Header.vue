@@ -86,7 +86,8 @@ const param = reactive<IFormData>({
   decimal: undefined,
 })
 
-watch(() => param.type, (newVal, _) => {
+watch(() => param.type, (newVal, oldVal) => {
+  if (!newVal || newVal === oldVal) return
   Object.assign(param, getInitialFieldValues(newVal))
 })
 
@@ -105,7 +106,7 @@ const addToForm = async () => {
   const res = await formRef.value?.validate()
   if (!res) return
   const index = formStore.form.findIndex(item => item.name === param.name)
-  if (index > 0) {
+  if (index >= 0) {
     ElMessage.error('属性名称已存在')
     return
   }

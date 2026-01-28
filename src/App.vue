@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElButton, ElInput, ElForm, ElFormItem, ElLoading } from 'element-plus'
+import { ElButton, ElInput, ElForm, ElFormItem, ElMessage } from 'element-plus'
 import { useFormStore } from './stores/form'
 import { computed, ref, watch } from 'vue'
 import type { IFormData } from './types'
@@ -19,14 +19,14 @@ const drawer = ref(false)
 const code = ref<string | undefined>('')
 const maxLen = ref<number>(10)
 const loading = ref(false)
+// const maxLenStr = ref<number>(1000)
 
 const disable = computed(() => {
   return formStore.form.length <= 0
 })
 
-watch(() => modifyInfo.value.type, (newVal, _) => {
-  if (!newVal) return
-
+watch(() => modifyInfo.value.type, (newVal, oldVal) => {
+  if (!newVal || newVal === oldVal) return
   // 使用工具函数简化逻辑
   Object.assign(modifyInfo.value, getInitialFieldValues(newVal))
 })
@@ -38,16 +38,21 @@ const modifyHandler = (id: string, show: boolean) => {
   console.log(modifyInfo.value)
 }
 
-const randomCodeHandler = () => {
+const randomCodeHandler = async () => {
   loading.value = true
-  formStore.genrateJSON(maxLen.value).then((res) => {
-    code.value = res
-    copyToClipboard(code.value)
-  }).catch(error => {
-    console.log(error)
-  }).finally(() => {
+  try {
+    code.value = await formStore.genrateJSON(maxLen.value)
+  } catch (error) {
+    ElMessage.error('生成失败！')
+    console.error(error)
+  } finally {
     loading.value = false
-  })
+  }
+}
+
+const copyCodeHandler = () => {
+  if (!code.value) return
+  copyToClipboard(code.value)
 }
 
 const revoke = () => {
@@ -67,10 +72,13 @@ const revoke = () => {
     <Table :data="formStore.form" @update:data="modifyHandler" />
 
     <Transition mode="in-out">
-      <div class="code-display" v-show="code">
+      <div class="code-display relative" v-show="code">
         <pre class="code-wrapper">
           <code class="code-content">{{ code }}</code>
       </pre>
+        <div class="absolute top-5 right-5">
+          <img src="/copy.svg" alt="" srcset="" class="size-5" @click="copyCodeHandler" />
+        </div>
       </div>
     </Transition>
 
